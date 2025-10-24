@@ -2,8 +2,11 @@ package com.example.androiduitesting;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+// Make sure to add these imports
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,7 +16,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    // Declare the variables so that you will be able to reference it later.
+
     ListView cityList;
     EditText newName;
     LinearLayout nameField;
@@ -30,16 +33,31 @@ public class MainActivity extends AppCompatActivity {
 
         cityList = findViewById(R.id.city_list);
 
-        //String []cities ={"Edmonton", "Vancouver", "Moscow", "Sydney", "Berlin", "Vienna", "Tokyo", "Beijing", "Osaka", "New Delhi"};
-
         dataList = new ArrayList<>();
-
-        //dataList.addAll(Arrays.asList(cities));
 
         cityAdapter = new ArrayAdapter<>(this, R.layout.content, dataList);
 
-
         cityList.setAdapter(cityAdapter);
+
+
+        cityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the name of the city that was clicked
+                String cityName = dataList.get(position);
+
+                // Create an Intent to start ShowActivity
+                Intent intent = new Intent(MainActivity.this, ShowActivity.class);
+
+                // Pass the city name to the new activity
+                intent.putExtra("CITY_NAME", cityName);
+
+                // Start the activity
+                startActivity(intent);
+            }
+        });
+
+
 
         final Button addButton = findViewById(R.id.button_add);
         addButton.setOnClickListener(new View.OnClickListener() {
